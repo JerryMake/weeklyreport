@@ -4,9 +4,13 @@ import datetime
 import time
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
+from django.utils.http import urlquote
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
+from io import BytesIO
+from openpyxl import Workbook
+from xlrd import sheet
 
 from UserApp import models
 from UserApp.models import User, Report
@@ -233,9 +237,13 @@ def createReport(request):
         need_help = request.POST.get('need_help')
         week_number = request.POST.get('week_number')
         if department!='' and reporter!='':
+            findUser = User.objects.filter(userCode=reporter).first()
+            print(findUser)
+            reporter_name = findUser.userName
+            print(reporter_name)
             models.Report.objects.create(week_number=week_number,department=department,reporter=reporter,this_week_completed=this_week_completed,
                                          this_week_not_completed=this_week_not_completed,last_reson=last_reson,next_week_plan=next_week_plan,
-                                         need_help=need_help)
+                                         need_help=need_help,reporter_name=reporter_name)
         else:
             return HttpResponse('部门不能为空')
         return HttpResponse('周报填写成功！')
@@ -268,3 +276,37 @@ def thisWeek(request):
         if week_number!='':
             this_week = Report.objects.filter(Q(week_number=week_number)).all()
             return render(request,'thisWeek.html',{'this_week':this_week})
+
+    if request.method == 'POST':
+        # 导出excel
+        # 获取本周周数
+        this_week = time.strftime('%W')
+        wb = Workbook()		# 生成一个工作簿（即一个Excel文件）
+        wb.encoding = 'utf-8'
+        sheet1 = wb.active	# 获取第一个工作表（sheet1）
+        sheet1.title = '挂号信息'	# 给工作表1设置标题
+        row_one = ['周报序号', '名称', '部门', '本周完成的计划工作', '本周未完成的计划工作','未完成原因', '下周计划', '需要公司协助事项', '创建时间', '周数']
+        for i in range(1, len(row_one)+1):	# 从第一行开始写，因为Excel文件的行号是从1开始，列号也是从1开始
+            # 从row=1，column=1开始写，即将row_one的数据依次写入第一行
+            sheet1.cell(row=1, column=i).value=row_one[i-1]
+            all_obj = Report.objects.filter(week_number=this_week).all()
+        for obj in all_obj:
+            max_row = sheet1.max_row + 1	# 获取到工作表的最大行数并加1
+            obj_info = [obj.id,obj.reporter_name,obj.department,obj.this_week_completed,obj.this_week_not_completed,obj.last_reson,obj.next_week_plan,obj.need_help,
+                        obj.createTime,obj.week_number]
+            for x in range(1, len(obj_info)+1):		# 将每一个对象的所有字段的信息写入一行内
+                sheet1.cell(row=max_row, column=x).value = obj_info[x-1]
+
+            # 准备写入到IO中
+        output = BytesIO()
+        wb.save(output)	 # 将Excel文件内容保存到IO中
+        output.seek(0)	 # 重新定位到开始
+        # 设置HttpResponse的类型
+        response = HttpResponse(output.getvalue(), content_type='application/vnd.ms-excel')
+        ctime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        file_name = '周报%s.xls' % ctime	# 给文件名中添加日期时间
+        file_name = urlquote(file_name)	 # 使用urlquote()方法解决中文无法使用的问题
+        response['Content-Disposition'] = 'attachment; filename=%s' % file_name
+        # response.write(output.getvalue())	 # 在设置HttpResponse的类型时，如果给了值，可以不写这句
+        return response
+

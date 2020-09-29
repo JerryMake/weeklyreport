@@ -22,7 +22,7 @@ class Report(models.Model):
     # 周报表实例
     id = models.AutoField(verbose_name='id',primary_key=True)
     department = models.CharField(max_length=30,verbose_name='部门')
-    reporter = models.CharField(max_length=10,verbose_name='周报填写人')
+    reporter = models.CharField(max_length=10,verbose_name='周报填写人账号')
     this_week_completed = models.TextField(max_length=1200,verbose_name='本周完成的计划工作')
     this_week_not_completed = models.TextField(max_length=1200,verbose_name='本周未完成的计划工作')
     last_reson = models.CharField(max_length=10,verbose_name='上周未完成原因')
@@ -30,6 +30,7 @@ class Report(models.Model):
     need_help = models.CharField(max_length=255,verbose_name='需要公司协调的事项')
     createTime = models.DateTimeField(verbose_name='周报创建时间',auto_now_add=True)
     week_number = models.CharField(max_length=10,verbose_name='周数')
+    reporter_name = models.CharField(max_length=30,verbose_name='周报填写人名称')
 
     def __str__(self):
         return u'Report:%s'%self.id

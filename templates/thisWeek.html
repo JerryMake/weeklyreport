@@ -13,7 +13,7 @@
 <script src="/static/js/pintuer.js"></script>
 </head>
 <body>
-<form method="POST" action="myReport.html">
+<form method="POST" action="thisWeek.html">
 {% csrf_token %}
   <div class="panel admin-panel">
     <div class="panel-head"><strong class="icon-reorder"> 本周周报</strong> <a href="" style="float:right; display:none;">添加字段</a></div>
@@ -28,7 +28,7 @@
     <table class="table table-hover text-center">
       <tr>
         <th width="100" style="text-align:left; padding-left:20px;">周报ID</th>
-        <th width="10%">用户账号</th>
+        <th width="10%">用户姓名</th>
 		<th width="10%">部门</th>
         <th>本周完成的计划工作</th>
         <th>本周未完成的计划工作</th>
@@ -43,7 +43,7 @@
           {% for thisweek in this_week %}
         <tr>
           <td style="text-align:left; padding-left:20px;"><input type="checkbox" name="user_id" value="{{ thisweek.id }}" />{{ thisweek.id }}</td>
-          <td>{{ thisweek.reporter }}</td>
+          <td>{{ thisweek.reporter_name }}</td>
           <td>{{ thisweek.department }}</td>
           <td><font color="#000ff0">{{ thisweek.this_week_completed }}</font></td>
           <td width="10%">{{ thisweek.this_week_not_completed }}</td>

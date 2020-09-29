@@ -30,7 +30,7 @@
     <table class="table table-hover text-center">
       <tr>
         <th style="text-align:left; padding-left:20px;">周报ID</th>
-        <th>用户账号</th>
+        <th>用户姓名</th>
 		<th>部门</th>
         <th>本周完成的计划工作</th>
         <th>本周未完成的计划工作</th>
@@ -44,10 +44,10 @@
           {% for myreport in findReport %}
         <tr>
           <td style="text-align:left; padding-left:20px;"><input type="checkbox" name="user_id" value="{{ myreport.id }}" />{{ myreport.id }}</td>
-          <td class="line-limit-length">{{ myreport.reporter }}</td>
+          <td class="line-limit-length">{{ myreport.reporter_name }}</td>
           <td class="line-limit-length">{{ myreport.department }}</td>
           <td style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 150px;display: block;height: 100px;" title="{{ myreport.this_week_completed }}">{{ myreport.this_week_completed }}</td>
-          <td style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 150px;display: block;height: 100px;" title="{{ myreport.this_week_not_completed }}">{{ myreport.this_week_not_completed }}</td>
+          <td>{{ myreport.this_week_not_completed }}</td>
 		  <td width="10%" class="line-limit-length">{{ myreport.last_reson }}</td>
           <td width="10%" class="line-limit-length">{{ myreport.next_week_plan }}</td>
 		  <td width="10%" class="line-limit-length">{{ myreport.need_help }}</td>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    {% load static %}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="{% static 'css/pintuer.css'%}">
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+<script src="{% static 'js/jquery.js'%}"></script>
+<script src="{% static 'js/pintuer.js' %}"></script><script type="text/javascript">
+function createReport(){
+	var last_list = []
+	var last_id = document.getElementById('id')
+    var last_project = document.getElementsByName('last_project')
+	var this_week = document.getElementById('this_week').value
+	var this_report = document.getElementById('this_report').value
+	var project = document.getElementById('project').value
+	var userCode = document.getElementById('userCode').value
+	var last_week_complete = document.getElementById('last_complete').value
+	console.log("last_week_complete"+last_week_complete)
+	for (var i=0;i<last_id.length;i++){
+        if(last_id[i].checked==true){
+            last_list[i]=last_id[i].value
+            console.log(last_list[i])
+        }
+    }
+
+    if(list.length!=0){
+        $.ajax({
+            url:"/createReport",
+            type:"POST",
+            contenType:"application/json",
+            traditional:true,
+            async: false,
+            data:{
+				'last_week_complete':last_week_complete,
+                'last_list':last_list,
+				'this_week':this_week,
+				'this_report':this_report,
+				'project':project,
+				'userCode':userCode,
+
+            },
+            success:function(){
+              alert('删除成功');
+              window.location.href='userList.html'
+            },
+            error:function(){
+                alert('删除失败');
+            }
+        })
+    }
+    else{
+        alert('请选择数据');
+    }
+}
+
+</script>
+</head>
+<body>
+<div class="panel admin-panel">
+
+<div class="panel admin-panel margin-top" id="add">
+  <div class="panel-head"><strong><span class="icon-pencil-square-o"></span> 添加周报</strong></div>
+  <div class="body-content">
+
+    <form method="POST" class="form-x" action="createReport">
+		{% csrf_token %}
+		<div class="form-group">
+        <div class="label">
+          <label>用户账号：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" readonly="readonly" value="{{ userCode }}" name="userCode" id="userCode" data-validate="required:请输入设计项目" />
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>部门：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" value="{{ department }}" name="department" id="department" readonly="readonly" data-validate="required:请输入部门" />
+          <div class="tips"></div>
+        </div>
+      </div>
+        <div class="form-group">
+        <div class="label">
+          <label>周次：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" name="week_number" id="week_number" value="{{ this_week }}"  />
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>本周完成的计划工作：</label>
+        </div>
+        <div class="field">
+          <textarea type="text" class="input" name="this_week_completed" style="height:120px;" id="this_week_completed"></textarea>
+          <div class="tips"></div>
+        </div>
+      </div>
+		<div class="form-group">
+		<div class="label">
+		  <label>本周未完成的计划工作：</label>
+		</div>
+		<div class="field">
+		  <textarea type="text" class="input" name="this_week_not_completed" style="height:120px;" id="this_week_not_completed"></textarea>
+		  <div class="tips"></div>
+		</div>
+	  </div>
+		<div class="form-group">
+		<div class="label">
+		  <label>本周未完成原因：</label>
+		</div>
+		<div class="field">
+		  <textarea type="text" class="input" name="last_reson" style="height:120px;" id="last_reson"></textarea>
+		  <div class="tips"></div>
+		</div>
+	  </div>
+		<div class="form-group">
+        <div class="label">
+          <label>下周计划工作：</label>
+        </div>
+        <div class="field">
+          <textarea type="text" class="input" name="next_week_plan" style="height:120px;" id="next_week_plan"></textarea>
+          <div class="tips"></div>
+        </div>
+      </div>
+		<div class="form-group">
+        <div class="label">
+          <label>需要公司协调事项：</label>
+        </div>
+        <div class="field">
+          <textarea type="text" class="input" name="need_help" style="height:120px;" id="need_help"></textarea>
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+          <button class="button bg-main icon-check-square-o" type="submit" > 提交</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+
+</html>

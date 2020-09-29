@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    {% load static %}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="{% static 'css/pintuer.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+<script src="/static/js/jquery.js"></script>
+<script src="/static/js/pintuer.js"></script>
+</head>
+<body>
+<form method="POST" action="myReport.html">
+{% csrf_token %}
+  <div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder"> 我的周报</strong> <a href="" style="float:right; display:none;">添加字段</a></div>
+    <div class="padding border-bottom">
+      <ul class="search" style="padding-left:10px;">
+		  <li> <a class="button border-main icon-plus-square-o" href="addReport.html?userCode={{ userCode }}&&department={{ department }}"> 添加周报</a> </li>
+        <li>
+          周数：<input type="text" placeholder="请输入搜索关键字" value="" id="week_number" name="week_number" class="input" style="width:250px; line-height:17px;display:inline-block" />
+			<input type="text" name="reporter" value="{{ userCode }}" hidden="hidden">
+			<input type="text" name="department" value="{{ department }}" hidden="hidden">
+          <input  class="button border-main icon-search"  type="submit" value="搜索"> </li>
+      </ul>
+    </div>
+    <table class="table table-hover text-center">
+      <tr>
+        <th style="text-align:left; padding-left:20px;">周报ID</th>
+        <th>用户账号</th>
+		<th>部门</th>
+        <th>本周完成的计划工作</th>
+        <th>本周未完成的计划工作</th>
+        <th>未完成原因</th>
+		<th>下周计划</th>
+		<th>需要公司协助事项</th>
+        <th>创建时间</th>
+		<th>周数</th>
+        <th width="310">操作</th>
+      </tr>
+          {% for myreport in findReport %}
+        <tr>
+          <td style="text-align:left; padding-left:20px;"><input type="checkbox" name="user_id" value="{{ myreport.id }}" />{{ myreport.id }}</td>
+          <td class="line-limit-length">{{ myreport.reporter }}</td>
+          <td class="line-limit-length">{{ myreport.department }}</td>
+          <td style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 150px;display: block;height: 100px;" title="{{ myreport.this_week_completed }}">{{ myreport.this_week_completed }}</td>
+          <td style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 150px;display: block;height: 100px;" title="{{ myreport.this_week_not_completed }}">{{ myreport.this_week_not_completed }}</td>
+		  <td width="10%" class="line-limit-length">{{ myreport.last_reson }}</td>
+          <td width="10%" class="line-limit-length">{{ myreport.next_week_plan }}</td>
+		  <td width="10%" class="line-limit-length">{{ myreport.need_help }}</td>
+		  <td width="1%" class="line-limit-length">{{ myreport.createTime|date:"Y-m-d H:i:s"}}</td>
+		  <td width="1%" class="line-limit-length">{{ myreport.week_number }}</td>
+          <td><div class="button-group"> <a class="button border-main" href="goModify?id={{ myreport.id }}"><span class="icon-edit"></span> 修改</a> <a class="button border-red" href="javascript:void(0)" onclick="return del({{ myreport.id }})"><span class="icon-trash-o"></span> 删除</a> </div></td>
+        </tr>
+          {% endfor %}
+      <tr>
+        <td style="text-align:left; padding:19px 0;padding-left:20px;"><input type="checkbox" id="checkall"/>
+          全选 </td>
+        <td colspan="7" style="text-align:left;padding-left:20px;"><a href="javascript:void(0)" class="button border-red icon-trash-o" style="padding:5px 15px;" onclick="DelSelect()"> 删除</a></td>
+      </tr>
+      <tr>
+
+        <td colspan="8"><div class="pagelist">
+        {% if this_num %}
+        <a>第{{ this_num }}页</a>
+        {% endif %}
+          {% if paginator_data.has_previous %}
+                <a href="userList.html?num={{ paginator_data.previous_page_number }}">上一页</a>
+          {% endif %}
+          {% for n in paginator.page_range %}
+              <a href="userList.html?num={{ n }}">{{ n }}</a>
+          {% endfor %}
+          {% if paginator_data.has_next %}
+          <a href="userList.html?num={{ paginator_data.next_page_number }}">下一页</a>
+          {% endif %}
+          {% if end_num  %}
+          <a href="userList.html?num={{end_num }}">尾页</a>
+          {% endif %}
+        </div></td>
+      </tr>
+    </table>
+  </div>
+</form>
+<script type="text/javascript">
+
+//搜索
+function changesearch(){
+		var role = $('#role').val();
+        var userName = $('#userName').val();
+        var userCode = $('#userCode').val();
+        console.log(role)
+        console.log(userName)
+        console.log(userCode)
+        $.ajax({
+            url:"/findUser",
+            type:"POST",
+            contenType:"application/json",
+            traditional:true,
+            async: false,
+            data:{
+                'role':role,
+                'userName':userName,
+                'userCode':userCode,
+            },
+            success:function(){
+                alert('成功！')
+                window.location.href='userList.html?'
+            },
+            error:function(){
+                alert('失败！')
+            }
+        })
+
+}
+
+//单个删除
+function del(id){
+	if(confirm("您确定要删除吗?")){
+        window.location.href='deleteUser?id='+id;
+	}
+}
+
+//全选
+$("#checkall").click(function(){ 
+  $("input[name='id[]']").each(function(){
+	  if (this.checked) {
+		  this.checked = false;
+	  }
+	  else {
+		  this.checked = true;
+	  }
+  });
+})
+
+//批量删除
+function DelSelect(){
+    var id_list = [];
+    var select_id = document.getElementsByName('user_id')
+    console.log(select_id)
+    for (var i=0;i<select_id.length;i++){
+        if(select_id[i].checked==true){
+            id_list[i]=select_id[i].value
+            console.log(id_list[i])
+        }
+    }
+    if(id_list.length!=0){
+        $.ajax({
+            url:"/selectDelUser",
+            type:"POST",
+            contenType:"application/json",
+            traditional:true,
+            async: false,
+            data:{
+                'id_list':id_list
+            },
+            success:function(){
+              alert('删除成功');
+              window.location.href='userList.html'
+            },
+            error:function(){
+                alert('删除失败');
+            }
+        })
+    }
+    else{
+        alert('请选择数据');
+    }
+}
+
+//批量排序
+function sorts(){
+	var Checkbox=false;
+	 $("input[name='id[]']").each(function(){
+	  if (this.checked==true) {		
+		Checkbox=true;	
+	  }
+	});
+	if (Checkbox){	
+		
+		$("#listform").submit();		
+	}
+	else{
+		alert("请选择要操作的内容!");
+		return false;
+	}
+}
+
+
+//批量首页显示
+function changeishome(o){
+	var Checkbox=false;
+	 $("input[name='id[]']").each(function(){
+	  if (this.checked==true) {		
+		Checkbox=true;	
+	  }
+	});
+	if (Checkbox){
+		
+		$("#listform").submit();	
+	}
+	else{
+		alert("请选择要操作的内容!");		
+	
+		return false;
+	}
+}
+
+//批量推荐
+function changeisvouch(o){
+	var Checkbox=false;
+	 $("input[name='id[]']").each(function(){
+	  if (this.checked==true) {		
+		Checkbox=true;	
+	  }
+	});
+	if (Checkbox){
+		
+		
+		$("#listform").submit();	
+	}
+	else{
+		alert("请选择要操作的内容!");	
+		
+		return false;
+	}
+}
+
+//批量置顶
+function changeistop(o){
+	var Checkbox=false;
+	 $("input[name='id[]']").each(function(){
+	  if (this.checked==true) {		
+		Checkbox=true;	
+	  }
+	});
+	if (Checkbox){		
+		
+		$("#listform").submit();	
+	}
+	else{
+		alert("请选择要操作的内容!");		
+	
+		return false;
+	}
+}
+
+
+//批量移动
+function changecate(o){
+	var Checkbox=false;
+	 $("input[name='id[]']").each(function(){
+	  if (this.checked==true) {		
+		Checkbox=true;	
+	  }
+	});
+	if (Checkbox){		
+		
+		$("#listform").submit();		
+	}
+	else{
+		alert("请选择要操作的内容!");
+		
+		return false;
+	}
+}
+
+//批量复制
+function changecopy(o){
+	var Checkbox=false;
+	 $("input[name='id[]']").each(function(){
+	  if (this.checked==true) {		
+		Checkbox=true;	
+	  }
+	});
+	if (Checkbox){	
+		var i = 0;
+	    $("input[name='id[]']").each(function(){
+	  		if (this.checked==true) {
+				i++;
+			}		
+	    });
+		if(i>1){ 
+	    	alert("只能选择一条信息!");
+			$(o).find("option:first").prop("selected","selected");
+		}else{
+		
+			$("#listform").submit();		
+		}	
+	}
+	else{
+		alert("请选择要复制的内容!");
+		$(o).find("option:first").prop("selected","selected");
+		return false;
+	}
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - weekdb@localhost" uuid="fd37af8e-2fa5-451c-ab6d-4d284aa1d794">
+    <database-info product="MySQL" version="5.7.28" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.47 ( Revision: fe1903b1ecb4a96a917f7ed3190d80c049b1de29 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.4">
+      <schema id="1" name="weekdb"/>
+      <table id="2" parent="1" name="user"/>
+      <table id="3" parent="1" name="report"/>
+      <column id="4" parent="2" name="id">
+        <comment>用户id</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="5" parent="2" name="userCode">
+        <comment>用户账号</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="6" parent="2" name="userPassword">
+        <comment>用户密码</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="7" parent="2" name="logo">
+        <comment>用户头像</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="8" parent="2" name="userName">
+        <comment>用户名称</comment>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="9" parent="2" name="role">
+        <comment>用户角色</comment>
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="10" parent="2" name="createTime">
+        <comment>创建时间</comment>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <key id="11" parent="2" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="12" parent="3" name="id">
+        <comment>周报id</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(10)</data-type>
+      </column>
+      <column id="13" parent="3" name="project">
+        <comment>项目名称</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="14" parent="3" name="reporter">
+        <comment>周报填写人名称</comment>
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="15" parent="3" name="this_report">
+        <comment>本周周报</comment>
+        <data-type>text</data-type>
+      </column>
+      <column id="16" parent="3" name="last_report">
+        <comment>上周周报</comment>
+        <data-type>text</data-type>
+      </column>
+      <column id="17" parent="3" name="last_complete">
+        <comment>上周完成情况</comment>
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="18" parent="3" name="last_reson">
+        <comment>上周未完成原因</comment>
+        <data-type>varchar(225)</data-type>
+      </column>
+      <column id="19" parent="3" name="need_help">
+        <comment>需公司协调事项</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <key id="20" parent="3" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+    </database-model>
+  </data-source>
+  <data-source name="Django default" uuid="0593064b-a186-4a18-9c30-fa6969a0ffd6">
+    <database-info product="MySQL" version="5.7.28" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.47 ( Revision: fe1903b1ecb4a96a917f7ed3190d80c049b1de29 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.4">
+      <schema id="1" name="weekdb"/>
+      <table id="2" parent="1" name="user"/>
+      <table id="3" parent="1" name="report"/>
+      <table id="4" parent="1" name="django_migrations"/>
+      <column id="5" parent="2" name="id">
+        <comment>用户id</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="6" parent="2" name="userCode">
+        <comment>用户账号</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="7" parent="2" name="userPassword">
+        <comment>用户密码</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="8" parent="2" name="logo">
+        <comment>用户头像</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="9" parent="2" name="userName">
+        <comment>用户名称</comment>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="10" parent="2" name="role">
+        <comment>用户角色</comment>
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="11" parent="2" name="createTime">
+        <comment>创建时间</comment>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="12" parent="2" name="department">
+        <comment>部门</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <key id="13" parent="2" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="14" parent="3" name="id">
+        <comment>周报id</comment>
+        <mandatory>1</mandatory>
+        <data-type>int(10)</data-type>
+      </column>
+      <column id="15" parent="3" name="department">
+        <comment>部门</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="16" parent="3" name="reporter">
+        <comment>周报填写人名称</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="17" parent="3" name="this_week_completed">
+        <comment>本周完成的计划工作</comment>
+        <data-type>text</data-type>
+      </column>
+      <column id="18" parent="3" name="this_week_not_completed">
+        <comment>本周未完成的计划工作</comment>
+        <data-type>text</data-type>
+      </column>
+      <column id="19" parent="3" name="last_reson">
+        <comment>本周工作未完成原因</comment>
+        <data-type>varchar(300)</data-type>
+      </column>
+      <column id="20" parent="3" name="next_week_plan">
+        <comment>下周计划工作</comment>
+        <data-type>text</data-type>
+      </column>
+      <column id="21" parent="3" name="need_help">
+        <comment>需公司协调事项</comment>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="22" parent="3" name="createTime">
+        <comment>周报填写时间</comment>
+        <data-type>datetime</data-type>
+      </column>
+      <column id="23" parent="3" name="week_number">
+        <comment>周次</comment>
+        <data-type>varchar(10)</data-type>
+      </column>
+      <key id="24" parent="3" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="25" parent="4" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="26" parent="4" name="app">
+        <mandatory>1</mandatory>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="27" parent="4" name="name">
+        <mandatory>1</mandatory>
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="28" parent="4" name="applied">
+        <mandatory>1</mandatory>
+        <data-type>datetime(6)</data-type>
+      </column>
+      <key id="29" parent="4" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+    </database-model>
+  </data-source>
+</component>

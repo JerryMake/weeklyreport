@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    {% load static %}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="{% static 'css/pintuer.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/pintuer.js' %}"></script>
+</head>
+<body onload="exeit()">
+<div class="panel admin-panel">
+  <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>增加用户</strong></div>
+  <div class="body-content">
+    <form method="POST" class="form-x" action="addUser" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div id="result" hidden="hidden">{{ result }}</div>
+      <div class="form-group">
+        <div class="label">
+          <label>用户账号：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" value="" name="userCode" data-validate="required:请输入用户账号" />
+          <div class="tips"></div>
+        </div>
+      </div>
+        <div class="form-group">
+          <div class="label">
+            <label>用户角色：</label>
+          </div>
+          <div class="field">
+            <select name="role" class="input w50">
+              <option value="">请选择分类</option>
+              <option value="员工">员工</option>
+              <option value="管理员">管理员</option>
+            </select>
+            <div class="tips"></div>
+          </div>
+        </div>
+      <div class="clear"></div>
+      <div class="form-group">
+        <div class="label">
+          <label>用户名称：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" name="userName" value=""  data-validate="required:用户名称不能为空"/>
+          <div class="tips"></div>
+        </div>
+      </div>
+		 <div class="form-group">
+        <div class="label">
+          <label>所在部门：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" name="department" value=""  data-validate="required:所在部门不能为空"/>
+          <div class="tips"></div>
+        </div>
+      	</div>
+         <div class="form-group">
+            <div class="label">
+              <label>用户头像：</label>
+            </div>
+            <div class="field">
+              <input type="file" class="button bg-blue margin-left" id="upload" name="upload" value="+ 浏览上传"  style="float:left;">
+              <div class="tipss">图片尺寸：500*500</div>
+            </div>
+          </div>
+      <div class="form-group">
+        <div class="label">
+          <label>用户密码：</label>
+        </div>
+        <div class="field">
+          <input type="password" class="input w50" name="userPassword" value="" data-validate="required:用户密码不能为空"  />
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+          <button class="button bg-main icon-check-square-o" type="submit"> 提交</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+    function exeit(){
+        var userCode = document.getElementById('result').textContent
+        if (userCode=='该用户账号已存在！'){
+            alert('该用户账号已存在！')
+        }
+    }
+</script>
+</body></html>

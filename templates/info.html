@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    {% load static %}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>个人信息</title>
+    <link rel="stylesheet" href="{% static '/css/pintuer.css' %}">
+    <link rel="stylesheet" href="{% static '/css/admin.css' %}">
+    <script src="{% static '/js/jquery.js' %}"></script>
+    <script src="{% static '/js/pintuer.js' %}"></script>
+    <script type="text/javascript">
+        $(function() {
+   　　 Request();  //待调用的函数
+        });
+        function Request(argname){
+			 var url = document.location.href;
+             url = decodeURI(url);//转码
+			 var arrStr = url.substring(url.indexOf("?")+1).split("&&");
+			//return arrStr;
+			for(var i =0;i<arrStr.length;i++) {
+				 var loc = arrStr[i].indexOf(argname+"=");
+				 if(loc!=-1){
+					 return arrStr[i].replace(argname+"=","").replace("?","");
+					 break;
+				}
+			}
+            var userCode = arrStr[0];
+            var userName = arrStr[1];
+            var id = arrStr[2];
+            var role = arrStr[3];
+			var department = arrStr[4];
+            $('#userName').attr("value",userName)
+            $('#userCode').attr("value",userCode)
+            $('#id').attr("value",id)
+            $('#role').attr("value",role)
+			$('#department').attr("value",department)
+            console.log(arrStr);
+		return "";
+		}
+    </script>
+</head>
+<body>
+<div class="panel admin-panel">
+  <div class="panel-head"><strong><span class="icon-pencil-square-o"></span> 个人信息</strong></div>
+  <div class="body-content">
+    <form class="form-x" action="info.html">
+      <div class="form-group">
+        <div class="label">
+          <label>用户名称：</label>
+        </div>
+        <div class="field">
+          <input type="text" id="userName" class="input w50" name="userName" value="" readonly="readonly"/>
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>用户账号：</label>
+        </div>
+{#        <div class="field">#}
+{#          <input type="text" id="userCode" name="slogo" class="input tips" style="width:25%; float:left;" value="" data-toggle="hover" data-place="right" data-image=""  />#}
+{#          <input type="button" class="button bg-blue margin-left" id="image1" value="+ 浏览上传" >#}
+{#        </div>#}
+          <div class="field">
+          <input type="text" id="userCode" class="input w50" name="userCode" value="" readonly="readonly"/>
+          <div class="tips"></div>
+          </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>用户id：</label>
+        </div>
+        <div class="field">
+          <input type="text" id="id" class="input w50" name="surl" value="" readonly="readonly"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>用户角色：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" name="role" value="" id="role" readonly="readonly"/>
+          <div class="tips"></div>
+        </div>
+      </div>
+		<div class="form-group">
+        <div class="label">
+          <label>所在部门：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" name="department" value="" id="department" readonly="readonly"/>
+          <div class="tips"></div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+</body></html>

@@ -1,6 +1,4 @@
-import calendar
 import datetime
-
 import time
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
@@ -10,8 +8,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from io import BytesIO
 from openpyxl import Workbook
-from xlrd import sheet
-
 from UserApp import models
 from UserApp.models import User, Report
 
@@ -285,15 +281,14 @@ def thisWeek(request):
         wb.encoding = 'utf-8'
         sheet1 = wb.active	# 获取第一个工作表（sheet1）
         sheet1.title = '挂号信息'	# 给工作表1设置标题
-        row_one = ['周报序号', '名称', '部门', '本周完成的计划工作', '本周未完成的计划工作','未完成原因', '下周计划', '需要公司协助事项', '创建时间', '周数']
+        row_one = [ '名称', '部门', '本周完成的计划工作', '本周未完成的计划工作','未完成原因', '下周计划', '需要公司协助事项', ]
         for i in range(1, len(row_one)+1):	# 从第一行开始写，因为Excel文件的行号是从1开始，列号也是从1开始
             # 从row=1，column=1开始写，即将row_one的数据依次写入第一行
             sheet1.cell(row=1, column=i).value=row_one[i-1]
             all_obj = Report.objects.filter(week_number=this_week).all()
         for obj in all_obj:
             max_row = sheet1.max_row + 1	# 获取到工作表的最大行数并加1
-            obj_info = [obj.id,obj.reporter_name,obj.department,obj.this_week_completed,obj.this_week_not_completed,obj.last_reson,obj.next_week_plan,obj.need_help,
-                        obj.createTime,obj.week_number]
+            obj_info = [obj.reporter_name,obj.department,obj.this_week_completed,obj.this_week_not_completed,obj.last_reson,obj.next_week_plan,obj.need_help]
             for x in range(1, len(obj_info)+1):		# 将每一个对象的所有字段的信息写入一行内
                 sheet1.cell(row=max_row, column=x).value = obj_info[x-1]
 

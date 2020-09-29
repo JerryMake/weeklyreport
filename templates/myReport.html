@@ -51,9 +51,9 @@
 		  <td width="10%">{{ myreport.last_reson }}</td>
           <td width="10%">{{ myreport.next_week_plan }}</td>
 		  <td width="10%">{{ myreport.need_help }}</td>
-		  <td width="1%">{{ myreport.createTime|date:"Y-m-d H:i:s"}}</td>
+		  <td width="6%">{{ myreport.createTime|date:"Y-m-d H:i:s"}}</td>
 		  <td width="1%">{{ myreport.week_number }}</td>
-          <td><div class="button-group"> <a class="button border-main" href="goModify?id={{ myreport.id }}"><span class="icon-edit"></span> 修改</a> <a class="button border-red" href="javascript:void(0)" onclick="return del({{ myreport.id }})"><span class="icon-trash-o"></span> 删除</a> </div></td>
+          <td width="12%"><div class="button-group"> <a class="button border-main" href="goModify?id={{ myreport.id }}"><span class="icon-edit"></span> 修改</a> <a class="button border-red" href="javascript:void(0)" onclick="return del({{ myreport.id }})"><span class="icon-trash-o"></span> 删除</a> </div></td>
         </tr>
           {% endfor %}
       <tr>

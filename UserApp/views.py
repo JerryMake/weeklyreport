@@ -21,7 +21,7 @@ def login(request):
     if request.method == 'POST':
         userCode = request.POST.get('userCode')
         userPassword = request.POST.get('userPassword')
-        if userCode == None and userPassword == None:
+        if userCode == None or userPassword == None:
             result = '用户账号或密码不能为空！'
             return render(request,'login.html',{'result':result})
         else:
@@ -284,9 +284,38 @@ def show_myReport(request):
         reporter = request.POST.get('reporter')
         week_number = request.POST.get('week_number')
         department = request.POST.get('department')
+        # 获取当前页数（需要跳转的页数）
+        num = request.GET.get('num',1)
+        n = int(num)
         if week_number!=''and reporter!='':
             findReport = Report.objects.filter(Q(week_number=week_number)&Q(reporter=reporter)).all()
-            return render(request,'myReport.html',{'findReport':findReport,'userCode':reporter,'department':department})
+            if findReport.exists():
+
+                paginator = Paginator(findReport,6)
+                try:
+                    # 当前页数据
+                    paginator_data = paginator.page(n)
+                    # 返回跳转后的页数
+                    this_num = n
+                    # 返回最后一页页数
+                    end_num = int(paginator.count/6)+1
+                except PageNotAnInteger:
+                    # 返回第一页数据
+                    paginator_data = paginator.page(1)
+                    # 返回跳转后的页数
+                    this_num = 1
+                    # 返回最后一页页数
+                    end_num = int(paginator.count/6)+1
+                except EmptyPage:
+                    # 返回最后一页数据
+                    paginator_data = paginator.page(paginator.num_pages)
+                    # 返回跳转后的页数
+                    this_num = paginator.num_pages
+                    # 返回最后一页页数
+                    end_num = int(paginator.count/6)+1
+                return render(request,'myReport.html',{'paginator':paginator,'paginator_data':paginator_data,'this_num':this_num,'end_num':end_num,'userCode':reporter
+                                                       ,'department':department})
+            # return render(request,'myReport.html',{'findReport':findReport,'userCode':reporter,'department':department})
         else:
             return HttpResponse('查询不到数据！')
 

@@ -40,7 +40,7 @@
         <th width="310">操作</th>
       </tr>
       <volist name="list" id="vo">
-          {% for thisweek in this_week %}
+          {% for thisweek in paginator_data %}
         <tr>
           <td style="text-align:left; padding-left:20px;"><input type="checkbox" name="user_id" value="{{ thisweek.id }}" />{{ thisweek.id }}</td>
           <td>{{ thisweek.reporter_name }}</td>
@@ -67,16 +67,16 @@
         <a>第{{ this_num }}页</a>
         {% endif %}
           {% if paginator_data.has_previous %}
-                <a href="userList.html?num={{ paginator_data.previous_page_number }}">上一页</a>
+                <a href="userList.html?num={{ paginator_data.previous_page_number }}&&this_week={{ week_number }}">上一页</a>
           {% endif %}
           {% for n in paginator.page_range %}
-              <a href="userList.html?num={{ n }}">{{ n }}</a>
+              <a href="thisWeek.html?num={{ n }}&&this_week={{ week_number }}">{{ n }}</a>
           {% endfor %}
           {% if paginator_data.has_next %}
-          <a href="userList.html?num={{ paginator_data.next_page_number }}">下一页</a>
+          <a href="thisWeek.html?num={{ paginator_data.next_page_number }}&&this_week={{ week_number }}">下一页</a>
           {% endif %}
           {% if end_num  %}
-          <a href="userList.html?num={{end_num }}">尾页</a>
+          <a href="thisWeek.html?num={{end_num }}&&this_week={{ week_number }}">尾页</a>
           {% endif %}
         </div></td>
       </tr>

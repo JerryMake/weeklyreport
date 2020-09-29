@@ -20,4 +20,5 @@ urlpatterns = [
     path(r'createReport',views.createReport,name='createReport'), # 新增周报
     path(r'myReport.html',views.show_myReport,name='show_myReport'), # 进入“我的周报”
     path(r'thisWeek.html',views.thisWeek,name='thisWeek'), # 进入本周周报
+    path(r'allReport.html',views.allReport,name='allReport'), # 查看历史周报
 ]

@@ -7,53 +7,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="renderer" content="webkit">
 <title></title>
-<link rel="stylesheet" href="{% static 'css/pintuer.css' %}">
-<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+<link rel="stylesheet" href="/static/css/pintuer.css">
+<link rel="stylesheet" href="/static/css/admin.css">
 <script src="/static/js/jquery.js"></script>
 <script src="/static/js/pintuer.js"></script>
 </head>
 <body>
-<form method="POST" action="myReport.html">
+<form method="POST" action="allReport.html">
 {% csrf_token %}
   <div class="panel admin-panel">
-    <div class="panel-head"><strong class="icon-reorder"> 我的周报</strong> <a href="" style="float:right; display:none;">添加字段</a></div>
+    <div class="panel-head"><strong class="icon-reorder"> 所有周报</strong> <a href="" style="float:right; display:none;">添加字段</a></div>
     <div class="padding border-bottom">
       <ul class="search" style="padding-left:10px;">
-		  <li> <a class="button border-main icon-plus-square-o" href="addReport.html?userCode={{ userCode }}&&department={{ department }}"> 添加周报</a> </li>
         <li>
-          周数：<input type="text" placeholder="请输入搜索关键字" value="" id="week_number" name="week_number" class="input" style="width:250px; line-height:17px;display:inline-block" />
-			<input type="text" name="reporter" value="{{ userCode }}" hidden="hidden">
-			<input type="text" name="department" value="{{ department }}" hidden="hidden">
+          用户名称：<input type="text" placeholder="请输入搜索关键字" value="" id="userName" name="userName" class="input" style="width:250px; line-height:17px;display:inline-block" />
+          周数：<input type="text" placeholder="请输入周数" value="" id="week_number" name="week_number" class="input" style="width:100px; line-height:17px;display:inline-block" />
           <input  class="button border-main icon-search"  type="submit" value="搜索"> </li>
       </ul>
     </div>
     <table class="table table-hover text-center">
       <tr>
-        <th style="text-align:left; padding-left:20px;">周报ID</th>
-        <th>用户姓名</th>
-		<th>部门</th>
+        <th width="10%" style="text-align:left; padding-left:20px;">周报ID</th>
+        <th>用户名称</th>
+        <th>部门</th>
         <th>本周完成的计划工作</th>
         <th>本周未完成的计划工作</th>
-        <th>未完成原因</th>
-		<th>下周计划</th>
-		<th>需要公司协助事项</th>
-        <th>创建时间</th>
-		<th>周数</th>
+		<th>本周工作未完成原因</th>
+        <th>下周计划工作</th>
+		<th>需公司协调事项</th>
+		<th>周报填写时间</th>
+		<th>周次</th>
         <th width="310">操作</th>
       </tr>
-          {% for myreport in paginator_data %}
+      <volist name="list" id="vo">
+          {% for report in paginator_data %}
         <tr>
-          <td style="text-align:left; padding-left:20px;"><input type="checkbox" name="user_id" value="{{ myreport.id }}" />{{ myreport.id }}</td>
-          <td width="10%">{{ myreport.reporter_name }}</td>
-          <td width="10%">{{ myreport.department }}</td>
-          <td style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 150px;display: block;height: 50px;" title="{{ myreport.this_week_completed }}">{{ myreport.this_week_completed }}</td>
-          <td>{{ myreport.this_week_not_completed }}</td>
-		  <td width="10%">{{ myreport.last_reson }}</td>
-          <td width="10%">{{ myreport.next_week_plan }}</td>
-		  <td width="10%">{{ myreport.need_help }}</td>
-		  <td width="1%">{{ myreport.createTime|date:"Y-m-d H:i:s"}}</td>
-		  <td width="1%">{{ myreport.week_number }}</td>
-          <td><div class="button-group"> <a class="button border-main" href="goModify?id={{ myreport.id }}"><span class="icon-edit"></span> 修改</a> <a class="button border-red" href="javascript:void(0)" onclick="return del({{ myreport.id }})"><span class="icon-trash-o"></span> 删除</a> </div></td>
+          <td style="text-align:left; padding-left:20px;"><input type="checkbox" name="user_id" value="{{ report.id }}" />{{ report.id }}</td>
+          <td width="10%">{{ report.reporter_name }}</td>
+		  <td width="10%">{{ report.department }}</td>
+          <td>{{ report.this_week_completed }}</td>
+          <td>{{ report.this_week_not_completed }}</td>
+		  <td>{{ report.last_reson }}</td>
+          <td>{{ report.next_week_plan }}</td>
+		  <td>{{ report.need_help }}</td>
+          <td>{{ report.createTime|date:"Y-m-d H:i:s"}}</td>
+		  <td>{{ report.week_number }}</td>
+          <td><div class="button-group"> <a class="button border-main" href="goModify?id={{ report.id }}"><span class="icon-edit"></span> 修改</a> <a class="button border-red" href="javascript:void(0)" onclick="return del({{ report.id }})"><span class="icon-trash-o"></span> 删除</a> </div></td>
         </tr>
           {% endfor %}
       <tr>
@@ -63,24 +62,27 @@
       </tr>
       <tr>
 
-        <td colspan="8"><div class="pagelist">
+        <td colspan="8">
+		<div class="pagelist">
         {% if this_num %}
         <a>第{{ this_num }}页</a>
         {% endif %}
           {% if paginator_data.has_previous %}
-                <a href="myReport.html?num={{ paginator_data.previous_page_number }}&&userCode={{ userCode }}&&department={{ department }}">上一页</a>
+                <a href="allReport.html?num={{ paginator_data.previous_page_number }}&&userCode={{ userCode }}&&department={{ department }}">上一页</a>
           {% endif %}
           {% for n in paginator.page_range %}
-              <a href="myReport.html?num={{ n }}&&userCode={{ userCode }}&&department={{ department }}">{{ n }}</a>
+              <a href="allReport.html?num={{ n }}&&userCode={{ userCode }}&&department={{ department }}">{{ n }}</a>
           {% endfor %}
           {% if paginator_data.has_next %}
-          <a href="myReport.html?num={{ paginator_data.next_page_number }}&&userCode={{ userCode }}&&department={{ department }}">下一页</a>
+          <a href="allReport.html?num={{ paginator_data.next_page_number }}&&userCode={{ userCode }}&&department={{ department }}">下一页</a>
           {% endif %}
           {% if end_num  %}
-          <a href="myReport.html?num={{end_num }}&&userCode={{ userCode }}&&department={{ department }}">尾页</a>
+          <a href="allReport.html?num={{end_num }}&&userCode={{ userCode }}&&department={{ department }}">尾页</a>
           {% endif %}
-        </div></td>
+        </div>
+		</td>
       </tr>
+	  </volist>
     </table>
   </div>
 </form>

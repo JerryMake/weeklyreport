@@ -46,7 +46,6 @@ def login(request):
                 return render(request,'login.html',{'result':result})
     return render(request,'login.html')
 
-
 def info(request):
     # 跳转用户信息页面
     return render(request,"info.html")
@@ -168,7 +167,7 @@ def goModify(request):
         modify_user = User.objects.filter(id=id).first()
         if modify_user:
             return render(request,'modifyUser.html',{'modify_user':modify_user})
-    return ''
+    return HttpResponse('请求方式错误，请联系管理员！')
 
 @csrf_exempt
 def findUser(request):
@@ -185,7 +184,6 @@ def findUser(request):
         print(userCode)
         if userName!='' or role!='' or userCode !='':
             findUser = User.objects.filter(Q(userCode__contains=userCode) & Q(userName__contains=userName) & Q(role__contains=role))
-            print(findUser)
             if findUser:
                 paginator = Paginator(findUser,6)
                 try:
@@ -249,12 +247,39 @@ def show_myReport(request):
     if request.method == 'GET':
         userCode = request.GET.get('userCode')
         department = request.GET.get('department')
+        # 获取当前页数（需要跳转的页数）
+        num = request.GET.get('num',1)
+        n = int(num)
         if userCode !='':
-            findReport = Report.objects.filter(reporter=userCode).all().order_by('-week_number')
-            return render(request,'myReport.html',{'findReport':findReport,'department':department,'userCode':userCode})
-        else:
-            return HttpResponse('查询不到周报！')
+            print(userCode)
+            findReport = Report.objects.filter(Q(reporter=userCode)&Q(department=department)).all().order_by('-week_number')
+            if findReport.exists():
 
+                paginator = Paginator(findReport,6)
+                try:
+                    # 当前页数据
+                    paginator_data = paginator.page(n)
+                    # 返回跳转后的页数
+                    this_num = n
+                    # 返回最后一页页数
+                    end_num = int(paginator.count/6)+1
+                except PageNotAnInteger:
+                    # 返回第一页数据
+                    paginator_data = paginator.page(1)
+                    # 返回跳转后的页数
+                    this_num = 1
+                    # 返回最后一页页数
+                    end_num = int(paginator.count/6)+1
+                except EmptyPage:
+                    # 返回最后一页数据
+                    paginator_data = paginator.page(paginator.num_pages)
+                    # 返回跳转后的页数
+                    this_num = paginator.num_pages
+                    # 返回最后一页页数
+                    end_num = int(paginator.count/6)+1
+                return render(request,'myReport.html',{'paginator':paginator,'paginator_data':paginator_data,'this_num':this_num,'end_num':end_num,'userCode':userCode
+                                                       ,'department':department})
+        return HttpResponse("userCode",userCode)
     elif request.method == 'POST':
         reporter = request.POST.get('reporter')
         week_number = request.POST.get('week_number')
@@ -268,10 +293,39 @@ def show_myReport(request):
 def thisWeek(request):
     # 进入本周周报
     if request.method == 'GET':
+        # 获取当前页数（需要跳转的页数）
+        num = request.GET.get('num',1)
+        n = int(num)
         week_number = request.GET.get('this_week')
         if week_number!='':
             this_week = Report.objects.filter(Q(week_number=week_number)).all()
-            return render(request,'thisWeek.html',{'this_week':this_week})
+            if this_week.exists():
+
+                paginator = Paginator(this_week,6)
+                try:
+                    # 当前页数据
+                    paginator_data = paginator.page(n)
+                    # 返回跳转后的页数
+                    this_num = n
+                    # 返回最后一页页数
+                    end_num = int(paginator.count/6)+1
+                except PageNotAnInteger:
+                    # 返回第一页数据
+                    paginator_data = paginator.page(1)
+                    # 返回跳转后的页数
+                    this_num = 1
+                    # 返回最后一页页数
+                    end_num = int(paginator.count/6)+1
+                except EmptyPage:
+                    # 返回最后一页数据
+                    paginator_data = paginator.page(paginator.num_pages)
+                    # 返回跳转后的页数
+                    this_num = paginator.num_pages
+                    # 返回最后一页页数
+                    end_num = int(paginator.count/6)+1
+                return render(request,'thisWeek.html',{'paginator':paginator,'paginator_data':paginator_data,'this_num':this_num,'end_num':end_num,'week_number':week_number})
+            else:
+                return HttpResponse('本周数据不存在！')
 
     if request.method == 'POST':
         # 导出excel
@@ -304,4 +358,72 @@ def thisWeek(request):
         response['Content-Disposition'] = 'attachment; filename=%s' % file_name
         # response.write(output.getvalue())	 # 在设置HttpResponse的类型时，如果给了值，可以不写这句
         return response
+
+def allReport(request):
+    # 进入历史周报
+    if request.method == 'GET':
+        # 获取当前页数（需要跳转的页数）
+        num = request.GET.get('num',1)
+        n = int(num)
+        allReport= Report.objects.filter().all().order_by('-week_number')
+        if allReport.exists():
+            paginator = Paginator(allReport,6)
+            try:
+                # 当前页数据
+                paginator_data = paginator.page(n)
+                # 返回跳转后的页数
+                this_num = n
+                # 返回最后一页页数
+                end_num = int(paginator.count/6)+1
+            except PageNotAnInteger:
+                # 返回第一页数据
+                paginator_data = paginator.page(1)
+                # 返回跳转后的页数
+                this_num = 1
+                # 返回最后一页页数
+                end_num = int(paginator.count/6)+1
+            except EmptyPage:
+                # 返回最后一页数据
+                paginator_data = paginator.page(paginator.num_pages)
+                # 返回跳转后的页数
+                this_num = paginator.num_pages
+                # 返回最后一页页数
+                end_num = int(paginator.count/6)+1
+            return render(request,'allReport.html',{'paginator':paginator,'paginator_data':paginator_data,'this_num':this_num,'end_num':end_num})
+    elif request.method == 'POST':
+        # 按条件搜索历史周报记录
+        week_number = request.POST.get('week_number')
+        userName = request.POST.get('userName')
+        print("week_number:",week_number,"userName:",userName)
+        if week_number !='' or userName !='':
+            findReport = Report.objects.filter(Q(week_number=week_number)&Q(reporter_name__contains=userName))
+
+            # 获取当前页数（需要跳转的页数）
+            num = request.GET.get('num',1)
+            n = int(num)
+            if findReport.exists():
+                paginator = Paginator(findReport,6)
+                try:
+                    # 当前页数据
+                    paginator_data = paginator.page(n)
+                    # 返回跳转后的页数
+                    this_num = n
+                    # 返回最后一页页数
+                    end_num = int(paginator.count/6)+1
+                except PageNotAnInteger:
+                    # 返回第一页数据
+                    paginator_data = paginator.page(1)
+                    # 返回跳转后的页数
+                    this_num = 1
+                    # 返回最后一页页数
+                    end_num = int(paginator.count/6)+1
+                except EmptyPage:
+                    # 返回最后一页数据
+                    paginator_data = paginator.page(paginator.num_pages)
+                    # 返回跳转后的页数
+                    this_num = paginator.num_pages
+                    # 返回最后一页页数
+                    end_num = int(paginator.count/6)+1
+                return render(request,'allReport.html',{'paginator':paginator,'paginator_data':paginator_data,'this_num':this_num,'end_num':end_num})
+        return render(request,'allReport.html')
 

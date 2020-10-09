@@ -36,7 +36,7 @@ def login(request):
                     role = login_user.role
                     department = login_user.department
                     # 获取本周周数
-                    this_week = time.strftime('%W')
+                    this_week = int(time.strftime('%W'))+1
                     return render(request,'index.html',{'userName':userName,'logo':logo,'userCode':userCode,'id':id,'role':role,'department':department,'this_week':this_week})
                 else:
                     result = '密码错误！'
@@ -216,7 +216,7 @@ def addReport(request):
         userCode = request.GET.get('userCode')
         department = request.GET.get('department')
         # 获取本周周数
-        this_week = time.strftime('%W')
+        this_week = int(time.strftime('%W'))+1
         return render(request,'addReport.html',{'this_week':this_week,'userCode':userCode,'department':department})
 
 def createReport(request):
@@ -423,10 +423,8 @@ def allReport(request):
         # 按条件搜索历史周报记录
         week_number = request.POST.get('week_number')
         userName = request.POST.get('userName')
-        print("week_number:",week_number,"userName:",userName)
         if week_number !='' or userName !='':
-            findReport = Report.objects.filter(Q(week_number=week_number)&Q(reporter_name__contains=userName))
-
+            findReport = Report.objects.filter(Q(week_number=week_number)|Q(reporter_name =userName))
             # 获取当前页数（需要跳转的页数）
             num = request.GET.get('num',1)
             n = int(num)

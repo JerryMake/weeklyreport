@@ -146,59 +146,63 @@
         <data-type>varchar(30)</data-type>
       </column>
       <column id="16" parent="3" name="reporter">
-        <comment>周报填写人名称</comment>
+        <comment>周报填写人账号</comment>
         <mandatory>1</mandatory>
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="17" parent="3" name="this_week_completed">
+      <column id="17" parent="3" name="reporter_name">
+        <comment>周报填写人名称</comment>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="18" parent="3" name="this_week_completed">
         <comment>本周完成的计划工作</comment>
         <data-type>text</data-type>
       </column>
-      <column id="18" parent="3" name="this_week_not_completed">
+      <column id="19" parent="3" name="this_week_not_completed">
         <comment>本周未完成的计划工作</comment>
         <data-type>text</data-type>
       </column>
-      <column id="19" parent="3" name="last_reson">
+      <column id="20" parent="3" name="last_reson">
         <comment>本周工作未完成原因</comment>
         <data-type>varchar(300)</data-type>
       </column>
-      <column id="20" parent="3" name="next_week_plan">
+      <column id="21" parent="3" name="next_week_plan">
         <comment>下周计划工作</comment>
         <data-type>text</data-type>
       </column>
-      <column id="21" parent="3" name="need_help">
+      <column id="22" parent="3" name="need_help">
         <comment>需公司协调事项</comment>
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="22" parent="3" name="createTime">
+      <column id="23" parent="3" name="createTime">
         <comment>周报填写时间</comment>
         <data-type>datetime</data-type>
       </column>
-      <column id="23" parent="3" name="week_number">
+      <column id="24" parent="3" name="week_number">
         <comment>周次</comment>
         <data-type>varchar(10)</data-type>
       </column>
-      <key id="24" parent="3" name="PRIMARY">
+      <key id="25" parent="3" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>
-      <column id="25" parent="4" name="id">
+      <column id="26" parent="4" name="id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="26" parent="4" name="app">
+      <column id="27" parent="4" name="app">
         <mandatory>1</mandatory>
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="27" parent="4" name="name">
+      <column id="28" parent="4" name="name">
         <mandatory>1</mandatory>
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="28" parent="4" name="applied">
+      <column id="29" parent="4" name="applied">
         <mandatory>1</mandatory>
         <data-type>datetime(6)</data-type>
       </column>
-      <key id="29" parent="4" name="PRIMARY">
+      <key id="30" parent="4" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>

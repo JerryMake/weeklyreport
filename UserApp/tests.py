@@ -5,8 +5,9 @@ from django.test import TestCase
 # Create your tests here.
 import time
 import datetime
-# # 获取今天是第几周
-# print(time.strftime('%W'))
+# 获取今天是第几周
+this_week = int(time.strftime('%W'))+1
+print(this_week)
 # this = time.strftime('%W')
 # print(this)
 # # 获取当前是周几(0-6,0代表周一)

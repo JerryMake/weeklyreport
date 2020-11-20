@@ -150,8 +150,12 @@ def modifyUser(request):
         logo = request.FILES.get('upload')
         role = request.POST.get('role')
         department = request.POST.get('department')
+        # old_logo = request.POST.get('old_logo')
+        # print(old_logo)
         if logo != None:
             User.objects.filter(id=id).update(userName=userName,userPassword=userPassword,role=role,logo=logo,department=department)
+            # import os
+            # os.remove(old_logo)
             result = '修改成功'
             return  HttpResponseRedirect('/userList.html?result='+result)
         else:
@@ -363,12 +367,12 @@ def thisWeek(request):
         wb = Workbook()		# 生成一个工作簿（即一个Excel文件）
         wb.encoding = 'utf-8'
         sheet1 = wb.active	# 获取第一个工作表（sheet1）
-        sheet1.title = '挂号信息'	# 给工作表1设置标题
-        row_one = [ '名称', '部门', '本周完成的计划工作', '本周未完成的计划工作','未完成原因', '下周计划', '需要公司协助事项', ]
+        sheet1.title = '周报信息'	# 给工作表1设置标题
+        row_one = ['名称', '部门', '本周完成的计划工作', '本周未完成的计划工作','未完成原因', '下周计划', '需要公司协助事项', ]
         for i in range(1, len(row_one)+1):	# 从第一行开始写，因为Excel文件的行号是从1开始，列号也是从1开始
             # 从row=1，column=1开始写，即将row_one的数据依次写入第一行
             sheet1.cell(row=1, column=i).value=row_one[i-1]
-            all_obj = Report.objects.filter(week_number=this_week).all()
+            all_obj = Report.objects.filter(week_number=int(this_week)+1).all()
         for obj in all_obj:
             max_row = sheet1.max_row + 1	# 获取到工作表的最大行数并加1
             obj_info = [obj.reporter_name,obj.department,obj.this_week_completed,obj.this_week_not_completed,obj.last_reson,obj.next_week_plan,obj.need_help]

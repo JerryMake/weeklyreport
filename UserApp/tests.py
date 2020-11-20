@@ -6,8 +6,8 @@ from django.test import TestCase
 import time
 import datetime
 # 获取今天是第几周
-this_week = int(time.strftime('%W'))+1
-print(this_week)
+# this_week = int(time.strftime('%W'))+1
+# print(this_week)
 # this = time.strftime('%W')
 # print(this)
 # # 获取当前是周几(0-6,0代表周一)
@@ -61,5 +61,9 @@ print(this_week)
 # arr = [5,98,56,48,67,49,23,65,46]
 # arr.sort()
 # print(arr)
-
+# a = 12659.483+964.7292+23942.6968+4536.0318+1487.08+973.5+14855.61+282047.36+67171.258+30432.626
+# print(a)
+# b = 61538.95
+# c = b/a
+# print(c)
 
